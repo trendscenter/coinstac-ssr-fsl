@@ -43,9 +43,9 @@ def fsl_parser(args):
     X_types = X_info[2]
 
     X_df = pd.DataFrame.from_records(X_data)
+
     X_df.columns = X_df.iloc[0]
     X_df = X_df.reindex(X_df.index.drop(0))
-
     X_files = list(X_df['freesurferfile'])
 
     X = X_df[X_labels]
@@ -57,6 +57,8 @@ def fsl_parser(args):
 
     y_list = parse_for_y_array(args, X_files, y_files, y_labels)
     y = pd.DataFrame.from_records(y_list, columns=y_labels)
+
+    X = X.reindex_axis(sorted(X.columns), axis=1)
 
     return (
         X, y
