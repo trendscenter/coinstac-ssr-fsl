@@ -1,21 +1,21 @@
 {
   "meta": {
     "name": "single shot regression demo",
-    "id": "ssr_test",
+    "id": "ssr_fsl",
     "version": "v1.0.0",
-    "repository": "https:\/\/github.com\/MRN-Code\/ssr_test",
+    "repository": "https:\/\/github.com\/MRN-Code\/coinstac_ssr_fsl",
     "description": "a test from single shot regresssion"
   },
   "computation": {
     "type": "docker",
-    "dockerImage": "ssr_test",
+    "dockerImage": "ssr_fsl",
     "command": [
       "python",
       "\/computation\/local.py"
     ],
     "remote": {
       "type": "docker",
-      "dockerImage": "ssr_test",
+      "dockerImage": "ssr_fsl",
       "command": [
         "python",
         "\/computation\/remote.py"

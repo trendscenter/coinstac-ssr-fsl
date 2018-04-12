@@ -3,15 +3,6 @@
 """
 This script includes the local computations for single-shot ridge
 regression with decentralized statistic calculation
-
-Example:
-    python local.py '{"input":
-                        {"covariates": [[2,3],[3,4],[7,8],[7,5],[9,8]],
-                         "dependents": [6,7,8,5,6],
-                         "lambda": 0
-                         },
-                     "cache": {}
-                     }'
 """
 import json
 import numpy as np
@@ -60,12 +51,13 @@ def local_1(args):
     """
     input_list = args["input"]
     (X, y) = fsl_parser(args)
+
     y_labels = list(y.columns)
 
     lamb = input_list["lambda"]
 
     beta_vector, meanY_vector, lenY_vector, local_stats_list = gather_local_stats(
-        X, y)
+        args, X, y)
 
     computation_output = {
         "output": {

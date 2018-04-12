@@ -15,10 +15,12 @@ with warnings.catch_warnings():
     import statsmodels.api as sm
 
 
-def gather_local_stats(X, y):
+def gather_local_stats(args, X, y):
 
     y_labels = list(y.columns)
+
     biased_X = sm.add_constant(X)
+
     meanY_vector, lenY_vector = [], []
 
     local_params = []
