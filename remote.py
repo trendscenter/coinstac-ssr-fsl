@@ -193,7 +193,7 @@ def remote_2(args):
 
 if __name__ == '__main__':
 
-    parsed_args = json.loads(sys.argv[1])
+    parsed_args = json.loads(sys.stdin.read())
     phase_key = list(reg.listRecursive(parsed_args, 'computation_phase'))
 
     if "local_1" in phase_key:

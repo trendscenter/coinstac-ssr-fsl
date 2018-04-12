@@ -20,6 +20,7 @@ import sys
 import regression as reg
 import warnings
 from parsers import fsl_parser
+from local_ancillary import gather_local_stats
 
 with warnings.catch_warnings():
     warnings.simplefilter("ignore")
@@ -58,45 +59,13 @@ def local_1(args):
 
     """
     input_list = args["input"]
-    (X, y, y_labels) = fsl_parser(args)
+    (X, y) = fsl_parser(args)
+    y_labels = list(y.columns)
 
     lamb = input_list["lambda"]
-    biased_X = sm.add_constant(X)
-    biased_X = biased_X.values
 
-    beta_vector, meanY_vector, lenY_vector = [], [], []
-
-    local_params = []
-    local_sse = []
-    local_pvalues = []
-    local_tvalues = []
-    local_rsquared = []
-
-    for column in y.columns:
-        curr_y = list(y[column])
-        beta = reg.one_shot_regression(biased_X, curr_y, lamb)
-        beta_vector.append(beta.tolist())
-        meanY_vector.append(np.mean(curr_y))
-        lenY_vector.append(len(y))
-
-        # Printing local stats as well
-        model = sm.OLS(curr_y, biased_X.astype(float)).fit()
-        local_params.append(model.params)
-        local_sse.append(model.ssr)
-        local_pvalues.append(model.pvalues)
-        local_tvalues.append(model.tvalues)
-        local_rsquared.append(model.rsquared_adj)
-
-    keys = ["beta", "sse", "pval", "tval", "rsquared"]
-    dict_list = []
-    for index, _ in enumerate(y_labels):
-        values = [
-            local_params[index].tolist(), local_sse[index],
-            local_pvalues[index].tolist(), local_tvalues[index].tolist(),
-            local_rsquared[index]
-        ]
-        local_stats_dict = {key: value for key, value in zip(keys, values)}
-        dict_list.append(local_stats_dict)
+    beta_vector, meanY_vector, lenY_vector, local_stats_list = gather_local_stats(
+        X, y)
 
     computation_output = {
         "output": {
@@ -104,12 +73,12 @@ def local_1(args):
             "mean_y_local": meanY_vector,
             "count_local": lenY_vector,
             "y_labels": y_labels,
-            "local_stats_dict": dict_list,
+            "local_stats_dict": local_stats_list,
             "computation_phase": 'local_1',
         },
         "cache": {
-            "covariates": X.values.tolist(),
-            "dependents": y.values.tolist(),
+            "covariates": X.to_json(),
+            "dependents": y.to_json(),
             "lambda": lamb
         }
     }
@@ -151,15 +120,12 @@ def local_2(args):
     cache_list = args["cache"]
     input_list = args["input"]
 
-    X = cache_list["covariates"]
-    y = cache_list["dependents"]
-    biased_X = sm.add_constant(X)
+    X = pd.read_json(cache_list["covariates"])
+    y = pd.read_json(cache_list["dependents"])
+    biased_X = sm.add_constant(X.values)
 
     avg_beta_vector = input_list["avg_beta_vector"]
     mean_y_global = input_list["mean_y_global"]
-
-    #    raise Exception(y, type(y))
-    y = pd.DataFrame(y)
 
     SSE_local, SST_local = [], []
     for index, column in enumerate(y.columns):
@@ -186,7 +152,7 @@ def local_2(args):
 
 if __name__ == '__main__':
 
-    parsed_args = json.loads(sys.argv[1])
+    parsed_args = json.loads(sys.stdin.read())
     phase_key = list(reg.listRecursive(parsed_args, 'computation_phase'))
 
     if not phase_key:

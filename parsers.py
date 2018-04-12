@@ -56,4 +56,4 @@ def fsl_parser(args):
     y_list = parse_for_y_array(args, X_files, y_files, y_labels)
     y = pd.DataFrame.from_records(y_list, columns=y_labels)
 
-    return (X, y, y_labels)  # Ask about labels being available at this level without being passed around
+    return (X, y)  # Ask about labels being available at this level without being passed around
