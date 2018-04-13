@@ -51,7 +51,6 @@ def local_1(args):
     """
     input_list = args["input"]
     (X, y) = fsl_parser(args)
-    raise Exception(y)
 
     y_labels = list(y.columns)
 
