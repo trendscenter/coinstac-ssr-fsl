@@ -59,20 +59,24 @@ def local_1(args):
     beta_vector, meanY_vector, lenY_vector, local_stats_list = gather_local_stats(
         args, X, y)
 
+    output_dict = {
+        "beta_vector_local": beta_vector,
+        "mean_y_local": meanY_vector,
+        "count_local": lenY_vector,
+        "y_labels": y_labels,
+        "local_stats_dict": local_stats_list,
+        "computation_phase": 'local_1',
+    }
+
+    cache_dict = {
+        "covariates": X.to_json(orient='records'),
+        "dependents": y.to_json(orient='records'),
+        "lambda": lamb
+    }
+
     computation_output = {
-        "output": {
-            "beta_vector_local": beta_vector,
-            "mean_y_local": meanY_vector,
-            "count_local": lenY_vector,
-            "y_labels": y_labels,
-            "local_stats_dict": local_stats_list,
-            "computation_phase": 'local_1',
-        },
-        "cache": {
-            "covariates": X.to_json(),
-            "dependents": y.to_json(),
-            "lambda": lamb
-        }
+        "output": output_dict,
+        "cache": cache_dict,
     }
 
     return json.dumps(computation_output)
@@ -112,8 +116,8 @@ def local_2(args):
     cache_list = args["cache"]
     input_list = args["input"]
 
-    X = pd.read_json(cache_list["covariates"])
-    y = pd.read_json(cache_list["dependents"])
+    X = pd.read_json(cache_list["covariates"], orient='records')
+    y = pd.read_json(cache_list["dependents"], orient='records')
     biased_X = sm.add_constant(X.values)
 
     avg_beta_vector = input_list["avg_beta_vector"]
@@ -129,15 +133,16 @@ def local_2(args):
 
     varX_matrix_local = np.dot(biased_X.T, biased_X)
 
-    computation_output = {
-        "output": {
-            "SSE_local": SSE_local,
-            "SST_local": SST_local,
-            "varX_matrix_local": varX_matrix_local.tolist(),
-            "computation_phase": 'local_2'
-        },
-        "cache": {}
+    output_dict = {
+        "SSE_local": SSE_local,
+        "SST_local": SST_local,
+        "varX_matrix_local": varX_matrix_local.tolist(),
+        "computation_phase": 'local_2'
     }
+
+    cache_dict = {}
+
+    computation_output = {"output": output_dict, "cache": cache_dict}
 
     return json.dumps(computation_output)
 

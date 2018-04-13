@@ -40,7 +40,8 @@ def remote_1(args):
     """
     input_list = args["input"]
     userId = list(input_list)[0]
-    y_labels = input_list[userId]["y_labels"]  # don't like this line here because everyone has to sent the labels, but they should have been available at the remote itself by virtue of having specified in the compspec.json
+    y_labels = input_list[userId][
+        "y_labels"]  # don't like this line here because everyone has to sent the labels, but they should have been available at the remote itself by virtue of having specified in the compspec.json
 
     all_local_stats_dicts = [
         input_list[site]["local_stats_dict"] for site in input_list
@@ -62,19 +63,23 @@ def remote_1(args):
 
     dof_global = sum(count_y_local) - avg_beta_vector.shape[1]
 
+    output_dict = {
+        "avg_beta_vector": avg_beta_vector.tolist(),
+        "mean_y_global": mean_y_global.tolist(),
+        "computation_phase": 'remote_1'
+    }
+
+    cache_dict = {
+        "avg_beta_vector": avg_beta_vector.tolist(),
+        "mean_y_global": mean_y_global.tolist(),
+        "dof_global": dof_global.tolist(),
+        "y_labels": y_labels,
+        "local_stats_dict": all_local_stats_dicts
+    }
+
     computation_output = {
-        "output": {
-            "avg_beta_vector": avg_beta_vector.tolist(),
-            "mean_y_global": mean_y_global.tolist(),
-            "computation_phase": 'remote_1'
-        },
-        "cache": {
-            "avg_beta_vector": avg_beta_vector.tolist(),
-            "mean_y_global": mean_y_global.tolist(),
-            "dof_global": dof_global.tolist(),
-            "y_labels": y_labels,
-            "local_stats_dict": all_local_stats_dicts
-        },
+        "output": output_dict,
+        "cache": cache_dict,
     }
 
     return json.dumps(computation_output)
@@ -181,12 +186,9 @@ def remote_2(args):
         my_dict = {key: value for key, value in zip(keys2, values)}
         dict_list.append(my_dict)
 
-    computation_output = {
-        "output": {
-            "regressions": dict_list
-        },
-        "success": True
-    }
+    output_dict = {"regressions": dict_list}
+
+    computation_output = {"output": output_dict, "success": True}
 
     return json.dumps(computation_output)
 
