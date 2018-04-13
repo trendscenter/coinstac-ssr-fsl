@@ -17,8 +17,10 @@ def parse_for_each_y(args, X_files, y_files, dependent):
             with open(
                     os.path.join(args["state"]["baseDirectory"], file)) as fh:
                 for line in fh:
-                    if line.startswith(dependent[0]):
+                    if line.startswith(dependent):
                         y.append(float(line.split('\t')[1]))
+                    else:
+                        y.append(None)
 
     return y
 
