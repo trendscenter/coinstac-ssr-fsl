@@ -3,3 +3,5 @@ pandas
 scipy
 statsmodels
 nibabel
+pytest
+pytest-cov
