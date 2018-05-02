@@ -45,7 +45,7 @@ def fsl_parser(args):
     X = X * 1
 
     y_files = y_info[0]
-    y_labels = y_info[2][:-1]  # select all regions excluding the last one
+    y_labels = y_info[2]  # select all regions excluding the last one
 
     y = parse_for_y(args, X_files, y_files, y_labels)
 

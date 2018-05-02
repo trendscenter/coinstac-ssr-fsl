@@ -51,7 +51,6 @@ def local_1(args):
     """
     input_list = args["input"]
     (X, y) = fsl_parser(args)
-
     y_labels = list(y.columns)
 
     lamb = input_list["lambda"]

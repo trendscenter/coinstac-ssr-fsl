@@ -234,7 +234,7 @@
 "lhSurfaceHoles",
 "rhSurfaceHoles",
 "SurfaceHoles",
-"EstimatedTotalIntraCranialVols"
+"EstimatedTotalIntraCranialVol"
       ]
     ]
   },
@@ -433,7 +433,7 @@
 "lhSurfaceHoles",
 "rhSurfaceHoles",
 "SurfaceHoles",
-"EstimatedTotalIntraCranialVols"
+"EstimatedTotalIntraCranialVol"
       ]
     ]
   },
@@ -732,7 +732,7 @@
 "lhSurfaceHoles",
 "rhSurfaceHoles",
 "SurfaceHoles",
-"EstimatedTotalIntraCranialVols"
+"EstimatedTotalIntraCranialVol"
       ]
     ]
   },
@@ -990,7 +990,7 @@
 "lhSurfaceHoles",
 "rhSurfaceHoles",
 "SurfaceHoles",
-"EstimatedTotalIntraCranialVols"
+"EstimatedTotalIntraCranialVol"
       ]
     ]
   },
@@ -1329,7 +1329,7 @@
 "lhSurfaceHoles",
 "rhSurfaceHoles",
 "SurfaceHoles",
-"EstimatedTotalIntraCranialVols"
+"EstimatedTotalIntraCranialVol"
       ]
     ]
   },
