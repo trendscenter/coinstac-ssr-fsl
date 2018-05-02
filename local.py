@@ -79,7 +79,6 @@ def local_1(args):
         "cache": cache_dict,
     }
 
-    raise Exception(y.to_json(orient='records'))
     return json.dumps(computation_output)
 
 
