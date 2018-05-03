@@ -14,7 +14,7 @@ with warnings.catch_warnings():
     import statsmodels.api as sm
 
 
-def listRecursive(d, key):
+def list_recursive(d, key):
     for k, v in d.items():
         if isinstance(v, dict):
             for found in listRecursive(v, key):

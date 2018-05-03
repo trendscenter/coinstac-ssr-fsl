@@ -149,7 +149,7 @@ def local_2(args):
 if __name__ == '__main__':
 
     parsed_args = json.loads(sys.stdin.read())
-    phase_key = list(reg.listRecursive(parsed_args, 'computation_phase'))
+    phase_key = list(reg.list_recursive(parsed_args, 'computation_phase'))
 
     if not phase_key:
         computation_output = local_1(parsed_args)
