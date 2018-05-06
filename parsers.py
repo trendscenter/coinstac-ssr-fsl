@@ -14,7 +14,7 @@ def parse_for_y(args, X_files, y_files, y_labels):
     y = pd.DataFrame(index=y_labels)
 
     for file in y_files:
-        if file in X_files:
+        if any([curr_X_file in file for curr_X_file in X_files]):
             y_ = pd.read_csv(
                 os.path.join(args["state"]["baseDirectory"], file), sep='\t')
             y_.set_index('Measure:volume', inplace=True)
