@@ -4,7 +4,7 @@
 This script includes the remote computations for single-shot ridge
 regression with decentralized statistic calculation
 """
-import json
+import ujson as json
 import sys
 import scipy as sp
 import numpy as np
