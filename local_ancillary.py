@@ -61,6 +61,30 @@ def gather_local_stats(X, y):
     return (params, sse, tvalues, rsquared, dof_global)
 
 
+def local_stats_to_dict_numba(X, y):
+    """Wrap local statistics into a dictionary to be sent to the remote"""
+    X1 = sm.add_constant(X).values.astype('float64')
+    y1 = y.values.astype('float64')
+
+    params, sse, tvalues, rsquared, dof_global = gather_local_stats(X1, y1)
+
+    pvalues = 2 * sp.stats.t.sf(np.abs(tvalues), dof_global)
+
+    keys = ["beta", "sse", "pval", "tval", "rsquared"]
+
+    values1 = pd.DataFrame(
+        list(
+            zip(params.T.tolist(), sse.tolist(), pvalues.T.tolist(),
+                tvalues.T.tolist(), rsquared.tolist())),
+        columns=keys)
+
+    local_stats_list = values1.to_dict(orient='records')
+
+    beta_vector = params.T.tolist()
+
+    return beta_vector, local_stats_list
+
+
 def local_stats_to_dict(X, y):
     """Calculate local statistics"""
     y_labels = list(y.columns)
@@ -97,31 +121,6 @@ def local_stats_to_dict(X, y):
         local_stats_list.append(local_stats_dict)
 
         beta_vector = [l.tolist() for l in local_params]
-
-    return beta_vector, local_stats_list
-
-
-def local_stats_to_dict_numba(X, y):
-    """Wrap local statistics into a dictionary to be sent to the remote"""
-    X1 = sm.add_constant(X).values.astype('float64')
-    y1 = y.values.astype('float64')
-
-    params, sse, tvalues, rsquared, dof_global = gather_local_stats(X1, y1)
-
-    pvalues = 2 * sp.stats.t.sf(np.abs(tvalues), dof_global)
-
-    keys = ["beta", "sse", "pval", "tval", "rsquared"]
-    local_stats_list = []
-
-    for index, _ in enumerate(y.columns):
-        values = [
-            params[:, index].tolist(), sse[index], pvalues[:, index].tolist(),
-            tvalues[:, index].tolist(), rsquared[index]
-        ]
-        local_stats_dict = {key: value for key, value in zip(keys, values)}
-        local_stats_list.append(local_stats_dict)
-
-        beta_vector = [l.tolist() for l in params.T]
 
     return beta_vector, local_stats_list
 

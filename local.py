@@ -56,7 +56,7 @@ def local_1(args):
     lamb = input_list["lambda"]
 
     meanY_vector, lenY_vector = mean_and_len_y(y)
-    beta_vector, local_stats_list = local_stats_to_dict_numba(X, y)
+    beta_vector, local_stats_list = local_stats_to_dict(X, y)
 
     output_dict = {
         "beta_vector_local": beta_vector,
