@@ -1,5 +1,6 @@
+nibabel
+numba
 numpy
 pandas
 scipy
 statsmodels
-nibabel

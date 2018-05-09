@@ -11,7 +11,7 @@ import sys
 import regression as reg
 import warnings
 from parsers import fsl_parser
-from local_ancillary import mean_and_len_y, gather_local_stats
+from local_ancillary import mean_and_len_y, local_stats_to_dict, local_stats_to_dict_numba
 
 with warnings.catch_warnings():
     warnings.simplefilter("ignore")
@@ -55,10 +55,8 @@ def local_1(args):
 
     lamb = input_list["lambda"]
 
-    beta_vector, local_stats_list = gather_local_stats(
-        args, X, y)
-
     meanY_vector, lenY_vector = mean_and_len_y(y)
+    beta_vector, local_stats_list = local_stats_to_dict_numba(X, y)
 
     output_dict = {
         "beta_vector_local": beta_vector,
