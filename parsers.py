@@ -11,6 +11,7 @@ import nibabel as nib
 
 
 def parse_for_y(args, X_files, y_files, y_labels):
+    """Read contents of fsl files into a dataframe"""
     y = pd.DataFrame(index=y_labels)
 
     for file in y_files:
@@ -26,6 +27,8 @@ def parse_for_y(args, X_files, y_files, y_labels):
 
 
 def fsl_parser(args):
+    """Parse the freesurfer (fsl) specific inputspec.json and return the
+    covariate matrix (X) as well the dependent matrix (y) as dataframes"""
     input_list = args["input"]
     X_info = input_list["covariates"]
     y_info = input_list["data"]
@@ -57,6 +60,7 @@ def fsl_parser(args):
 
 
 def nifti_to_data(args, X_files, y_files):
+    """Read nifti files as matrices"""
     mask_file = os.path.join(args["state"]["baseDirectory"], 'mask_6mm.nii')
     mask_data = nib.load(mask_file).get_data()
 
@@ -74,6 +78,8 @@ def nifti_to_data(args, X_files, y_files):
 
 
 def vbm_parser(args):
+    """Parse the nifti (.nii) specific inputspec.json and return the
+    covariate matrix (X) as well the dependent matrix (y) as dataframes"""
     input_list = args["input"]
     X_info = input_list["covariates"]
     y_info = input_list["data"]
@@ -91,12 +97,13 @@ def vbm_parser(args):
     X = X_df[X_labels]
     X = X.apply(pd.to_numeric, errors='ignore')
     X = pd.get_dummies(X, drop_first=True)
+    X = X * 1
 
     y_files = y_info[0]
 
     y_list = nifti_to_data(args, X_files, y_files)
     y = pd.DataFrame.from_records(y_list)
 
-    X = X * 1
+    y.columns = ['{}_{}'.format('voxel', str(i)) for i in y.columns]
 
     return (X, y)
