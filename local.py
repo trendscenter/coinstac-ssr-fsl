@@ -11,7 +11,7 @@ import sys
 import regression as reg
 import warnings
 from parsers import fsl_parser
-from local_ancillary import gather_local_stats
+from local_ancillary import mean_and_len_y, gather_local_stats
 
 with warnings.catch_warnings():
     warnings.simplefilter("ignore")
@@ -55,8 +55,10 @@ def local_1(args):
 
     lamb = input_list["lambda"]
 
-    beta_vector, meanY_vector, lenY_vector, local_stats_list = gather_local_stats(
+    beta_vector, _, _, local_stats_list = gather_local_stats(
         args, X, y)
+
+    meanY_vector, lenY_vector = mean_and_len_y(y)
 
     output_dict = {
         "beta_vector_local": beta_vector,
