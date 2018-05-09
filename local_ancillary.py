@@ -28,8 +28,6 @@ def gather_local_stats(args, X, y):
 
     biased_X = sm.add_constant(X)
 
-    meanY_vector, lenY_vector = [], []
-
     local_params = []
     local_sse = []
     local_pvalues = []
@@ -38,8 +36,6 @@ def gather_local_stats(args, X, y):
 
     for column in y.columns:
         curr_y = list(y[column])
-        meanY_vector.append(np.mean(curr_y))
-        lenY_vector.append(len(y))
 
         # Printing local stats as well
         model = sm.OLS(curr_y, biased_X.astype(float)).fit()
@@ -63,7 +59,7 @@ def gather_local_stats(args, X, y):
 
         beta_vector = [l.tolist() for l in local_params]
 
-    return beta_vector, meanY_vector, lenY_vector, local_stats_list
+    return beta_vector, local_stats_list
 
 
 def add_site_covariates(args, X):

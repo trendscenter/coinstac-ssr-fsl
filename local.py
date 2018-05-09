@@ -55,7 +55,7 @@ def local_1(args):
 
     lamb = input_list["lambda"]
 
-    beta_vector, _, _, local_stats_list = gather_local_stats(
+    beta_vector, local_stats_list = gather_local_stats(
         args, X, y)
 
     meanY_vector, lenY_vector = mean_and_len_y(y)
