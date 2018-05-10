@@ -54,9 +54,7 @@ def fsl_parser(args):
 
     X = X.reindex(sorted(X.columns), axis=1)
 
-    return (
-        X, y
-    )  # Ask about labels being available at this level without being passed around
+    return (X, y)
 
 
 def nifti_to_data(args, X_files, y_files):
