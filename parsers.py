@@ -10,16 +10,19 @@ import pandas as pd
 import nibabel as nib
 
 
-def parse_for_y(args, X_files, y_files, y_labels):
+def parse_for_y(args, y_files, y_labels):
     """Read contents of fsl files into a dataframe"""
     y = pd.DataFrame(index=y_labels)
 
     for file in y_files:
-        if any([curr_X_file in file for curr_X_file in X_files]):
+        try:
             y_ = pd.read_csv(
                 os.path.join(args["state"]["baseDirectory"], file), sep='\t')
             y_.set_index('Measure:volume', inplace=True)
+            y_.columns = [file]
             y = pd.merge(y, y_, how='left', left_index=True, right_index=True)
+        except pd.errors.EmptyDataError:
+            continue
 
     y = y.T
 
@@ -35,13 +38,12 @@ def fsl_parser(args):
 
     X_data = X_info[0][0]
     X_labels = X_info[1]
-    X_types = X_info[2]
 
     X_df = pd.DataFrame.from_records(X_data)
 
     X_df.columns = X_df.iloc[0]
     X_df = X_df.reindex(X_df.index.drop(0))
-    X_files = list(X_df['freesurferfile'])
+    X_df.set_index(X_df.columns[0], inplace=True)
 
     X = X_df[X_labels]
     X = X.apply(pd.to_numeric, errors='ignore')
@@ -50,9 +52,13 @@ def fsl_parser(args):
     y_files = y_info[0]
     y_labels = y_info[2]
 
-    y = parse_for_y(args, X_files, y_files, y_labels)
+    y = parse_for_y(args, y_files, y_labels)
 
     X = X.reindex(sorted(X.columns), axis=1)
+
+    ixs = X.index.intersection(y.index)
+    X = X.loc[ixs]
+    y = y.loc[ixs]
 
     return (X, y)
 
