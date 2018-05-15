@@ -61,7 +61,7 @@ def gather_local_stats(X, y):
     return (params, sse, tvalues, rsquared, dof_global)
 
 
-def local_stats_to_dict_numba(X, y):
+def local_stats_to_dict_vbm(X, y):
     """Wrap local statistics into a dictionary to be sent to the remote"""
     X1 = sm.add_constant(X).values.astype('float64')
     y1 = y.values.astype('float64')
@@ -85,7 +85,7 @@ def local_stats_to_dict_numba(X, y):
     return beta_vector, local_stats_list
 
 
-def local_stats_to_dict(X, y):
+def local_stats_to_dict_fsl(X, y):
     """Calculate local statistics"""
     y_labels = list(y.columns)
 
@@ -98,10 +98,22 @@ def local_stats_to_dict(X, y):
     local_rsquared = []
 
     for column in y.columns:
-        curr_y = list(y[column])
+        y_ = y[column]
+
+        # Removing rows containing NaN's in X and y
+        X_ = biased_X.values.astype('float64')
+        y_ = y_.values.astype('float64')
+
+        finite_x_idx = np.isfinite(X_).any(axis=1)
+        finite_y_idx = np.isfinite(y_)
+
+        finite_idx = finite_y_idx & finite_x_idx
+
+        y_ = y_[finite_idx]
+        X_ = X_[finite_idx, :]
 
         # Printing local stats as well
-        model = sm.OLS(curr_y, biased_X.astype(float)).fit()
+        model = sm.OLS(y_, X_).fit()
         local_params.append(model.params)
         local_sse.append(model.ssr)
         local_pvalues.append(model.pvalues)
