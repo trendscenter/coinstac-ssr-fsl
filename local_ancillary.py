@@ -85,6 +85,30 @@ def local_stats_to_dict_vbm(X, y):
     return beta_vector, local_stats_list
 
 
+def ignore_nans(X, y):
+    # Removing rows containing NaN's in X and y
+
+    if type(X) is pd.DataFrame:
+        X_ = X.values.astype('float64')
+    else:
+        X_ = X
+
+    if type(y) is pd.Series:
+        y_ = y.values.astype('float64')
+    else:
+        y_ = y
+
+    finite_x_idx = np.isfinite(X_).any(axis=1)
+    finite_y_idx = np.isfinite(y_)
+
+    finite_idx = finite_y_idx & finite_x_idx
+
+    y_ = y_[finite_idx]
+    X_ = X_[finite_idx, :]
+
+    return X_, y_
+
+
 def local_stats_to_dict_fsl(X, y):
     """Calculate local statistics"""
     y_labels = list(y.columns)
@@ -98,19 +122,9 @@ def local_stats_to_dict_fsl(X, y):
     local_rsquared = []
 
     for column in y.columns:
-        y_ = y[column]
+        curr_y = y[column]
 
-        # Removing rows containing NaN's in X and y
-        X_ = biased_X.values.astype('float64')
-        y_ = y_.values.astype('float64')
-
-        finite_x_idx = np.isfinite(X_).any(axis=1)
-        finite_y_idx = np.isfinite(y_)
-
-        finite_idx = finite_y_idx & finite_x_idx
-
-        y_ = y_[finite_idx]
-        X_ = X_[finite_idx, :]
+        X_, y_ = ignore_nans(biased_X, curr_y)
 
         # Printing local stats as well
         model = sm.OLS(y_, X_).fit()

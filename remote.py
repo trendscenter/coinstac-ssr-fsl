@@ -149,7 +149,7 @@ def remote_2(args):
     ps_global = []
 
     for i in range(len(MSE)):
-        var_covar_beta_global = MSE[i] * sp.linalg.inv(varX_matrix_global)
+        var_covar_beta_global = MSE[i] * sp.linalg.inv(varX_matrix_global[i])
         se_beta_global = np.sqrt(var_covar_beta_global.diagonal())
         ts = (avg_beta_vector[i] / se_beta_global).tolist()
         ps = reg.t_to_p(ts, dof_global[i])
