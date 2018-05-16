@@ -51,6 +51,7 @@ def fsl_parser(args):
 
     X = X_df[X_labels]
     X = X.apply(pd.to_numeric, errors='ignore')
+    X = pd.get_dummies(X, drop_first=True)
     X = X * 1
 
     y_files = y_info[0]
