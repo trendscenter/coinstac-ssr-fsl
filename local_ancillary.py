@@ -17,7 +17,7 @@ with warnings.catch_warnings():
     import statsmodels.api as sm
 
 
-def mean_and_len_y(y):
+def mean_and_len_y(args, y):
     """Caculate the length mean of each y vector"""
     meanY_vector = y.mean(axis=0).tolist()
     lenY_vector = y.count(axis=0).tolist()
@@ -120,11 +120,14 @@ def local_stats_to_dict_fsl(X, y):
     local_pvalues = []
     local_tvalues = []
     local_rsquared = []
+    meanY_vector, lenY_vector = [], []
 
     for column in y.columns:
         curr_y = y[column]
 
         X_, y_ = ignore_nans(biased_X, curr_y)
+        meanY_vector.append(np.mean(y_))
+        lenY_vector.append(len(y_))
 
         # Printing local stats as well
         model = sm.OLS(y_, X_).fit()
@@ -148,7 +151,7 @@ def local_stats_to_dict_fsl(X, y):
 
         beta_vector = [l.tolist() for l in local_params]
 
-    return beta_vector, local_stats_list
+    return beta_vector, local_stats_list, meanY_vector, lenY_vector
 
 
 def add_site_covariates(args, X):
