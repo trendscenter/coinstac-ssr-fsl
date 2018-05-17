@@ -27,6 +27,8 @@ def parse_for_y(args, y_files, y_labels):
             y = pd.merge(y, y_, how='left', left_index=True, right_index=True)
         except pd.errors.EmptyDataError:
             continue
+        except FileNotFoundError:
+            continue
 
     y = y.T
 
