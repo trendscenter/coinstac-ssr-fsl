@@ -114,6 +114,7 @@ def local_stats_to_dict_fsl(X, y):
     y_labels = list(y.columns)
 
     biased_X = sm.add_constant(X)
+    X_labels = list(biased_X.columns)
 
     local_params = []
     local_sse = []
@@ -137,14 +138,14 @@ def local_stats_to_dict_fsl(X, y):
         local_tvalues.append(model.tvalues)
         local_rsquared.append(model.rsquared_adj)
 
-    keys = ["beta", "sse", "pval", "tval", "rsquared"]
+    keys = ["beta", "sse", "pval", "tval", "rsquared", "covariate_labels"]
     local_stats_list = []
 
     for index, _ in enumerate(y_labels):
         values = [
             local_params[index].tolist(), local_sse[index],
             local_pvalues[index].tolist(), local_tvalues[index].tolist(),
-            local_rsquared[index]
+            local_rsquared[index], X_labels
         ]
         local_stats_dict = {key: value for key, value in zip(keys, values)}
         local_stats_list.append(local_stats_dict)

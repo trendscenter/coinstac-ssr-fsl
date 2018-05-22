@@ -51,6 +51,8 @@ def local_1(args):
     """
     input_list = args["input"]
     (X, y) = fsl_parser(args)
+
+    X_labels = ['const'] + list(X.columns)
     y_labels = list(y.columns)
 
     lamb = input_list["lambda"]
@@ -61,6 +63,7 @@ def local_1(args):
         "beta_vector_local": beta_vector,
         "mean_y_local": meanY_vector,
         "count_local": lenY_vector,
+        "X_labels": X_labels,
         "y_labels": y_labels,
         "local_stats_dict": local_stats_list,
         "computation_phase": 'local_1',
