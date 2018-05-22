@@ -15,20 +15,22 @@ def parse_for_y(args, y_files, y_labels):
     y = pd.DataFrame(index=y_labels)
 
     for file in y_files:
-        try:
-            y_ = pd.read_csv(
-                os.path.join(args["state"]["baseDirectory"], file),
-                sep='\t',
-                header=None,
-                names=['Measure:volume', file],
-                index_col=0)
-            y_ = y_[~y_.index.str.contains("Measure:volume")]
-            y_ = y_.apply(pd.to_numeric, errors='ignore')
-            y = pd.merge(y, y_, how='left', left_index=True, right_index=True)
-        except pd.errors.EmptyDataError:
-            continue
-        except FileNotFoundError:
-            continue
+        if file:
+            try:
+                y_ = pd.read_csv(
+                    os.path.join(args["state"]["baseDirectory"], file),
+                    sep='\t',
+                    header=None,
+                    names=['Measure:volume', file],
+                    index_col=0)
+                y_ = y_[~y_.index.str.contains("Measure:volume")]
+                y_ = y_.apply(pd.to_numeric, errors='ignore')
+                y = pd.merge(
+                    y, y_, how='left', left_index=True, right_index=True)
+            except pd.errors.EmptyDataError:
+                continue
+            except FileNotFoundError:
+                continue
 
     y = y.T
 
