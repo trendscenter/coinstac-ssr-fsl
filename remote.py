@@ -162,7 +162,7 @@ def remote_2(args):
         ps_global.append(ps)
 
     # Block of code to print local stats as well
-    sites = ['Site_' + str(i) for i in range(len(all_local_stats_dicts))]
+    sites = [site for site in input_list]
 
     all_local_stats_dicts = list(map(list, zip(*all_local_stats_dicts)))
 
