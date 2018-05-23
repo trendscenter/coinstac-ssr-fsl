@@ -66,10 +66,15 @@ def fsl_parser(args):
     X = X.reindex(sorted(X.columns), axis=1)
 
     ixs = X.index.intersection(y.index)
-    X = X.loc[ixs]
-    y = y.loc[ixs]
 
-    return (X, y)
+    if ixs.empty:
+        error_message = "Empty intersection of X and y at " + args["state"]["clientId"]
+        return (error_message, )
+    else:
+        X = X.loc[ixs]
+        y = y.loc[ixs]
+
+        return (X, y)
 
 
 def nifti_to_data(args, X_files, y_files):

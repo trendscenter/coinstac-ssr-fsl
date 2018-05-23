@@ -50,14 +50,32 @@ def local_1(args):
 
     """
     input_list = args["input"]
-    (X, y) = fsl_parser(args)
+
+    func_output = fsl_parser(args)
+
+    if len(func_output) == 1:
+        output_dict = {
+            "computation_phase": 'error',
+            "error_message": func_output,
+            "success": True
+        }
+
+        computation_output = {
+            "output": output_dict,
+            "cache": {},
+        }
+
+        return json.dumps(computation_output)
+    else:
+        X, y = func_output
 
     X_labels = ['const'] + list(X.columns)
     y_labels = list(y.columns)
 
     lamb = input_list["lambda"]
 
-    beta_vector, local_stats_list, meanY_vector, lenY_vector = local_stats_to_dict_fsl(X, y)
+    beta_vector, local_stats_list, meanY_vector, lenY_vector = local_stats_to_dict_fsl(
+        X, y)
 
     output_dict = {
         "beta_vector_local": beta_vector,
@@ -130,8 +148,7 @@ def local_2(args):
 
         X_, y_ = ignore_nans(biased_X, curr_y)
 
-        SSE_local.append(
-            reg.sum_squared_error(X_, y_, avg_beta_vector[index]))
+        SSE_local.append(reg.sum_squared_error(X_, y_, avg_beta_vector[index]))
         SST_local.append(
             np.sum(np.square(np.subtract(y_, mean_y_global[index]))))
 

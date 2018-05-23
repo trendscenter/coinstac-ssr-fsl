@@ -193,7 +193,9 @@ if __name__ == '__main__':
     parsed_args = json.loads(sys.stdin.read())
     phase_key = list(reg.list_recursive(parsed_args, 'computation_phase'))
 
-    if "local_1" in phase_key:
+    if 'error' in phase_key:
+        sys.stdout.write(json.dumps(parsed_args))
+    elif "local_1" in phase_key:
         computation_output = remote_1(parsed_args)
         sys.stdout.write(computation_output)
     elif "local_2" in phase_key:
