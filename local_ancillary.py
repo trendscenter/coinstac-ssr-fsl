@@ -98,7 +98,7 @@ def ignore_nans(X, y):
     else:
         y_ = y
 
-    finite_x_idx = np.isfinite(X_).any(axis=1)
+    finite_x_idx = np.isfinite(X_).all(axis=1)
     finite_y_idx = np.isfinite(y_)
 
     finite_idx = finite_y_idx & finite_x_idx
