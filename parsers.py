@@ -66,8 +66,13 @@ def fsl_parser(args):
     X = X.reindex(sorted(X.columns), axis=1)
 
     ixs = X.index.intersection(y.index)
-    X = X.loc[ixs]
-    y = y.loc[ixs]
+
+    if ixs.empty:
+        raise Exception('No common X and y files at ' +
+                        args["state"]["clientId"])
+    else:
+        X = X.loc[ixs]
+        y = y.loc[ixs]
 
     return (X, y)
 
