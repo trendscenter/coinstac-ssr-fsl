@@ -17,7 +17,7 @@ with warnings.catch_warnings():
     import statsmodels.api as sm
 
 
-def mean_and_len_y(args, y):
+def mean_and_len_y(y):
     """Caculate the length mean of each y vector"""
     meanY_vector = y.mean(axis=0).tolist()
     lenY_vector = y.count(axis=0).tolist()

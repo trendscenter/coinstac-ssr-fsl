@@ -4,7 +4,7 @@
     "id": "ssr_fsl",
     "version": "v1.0.0",
     "repository": "https:\/\/github.com\/MRN-Code\/coinstac_ssr_fsl",
-    "description": "a test from single shot regresssion"
+    "description": "Single shot regresssion on FreeSurfer Data"
   },
   "computation": {
     "type": "docker",
