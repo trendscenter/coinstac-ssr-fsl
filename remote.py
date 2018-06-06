@@ -61,7 +61,9 @@ def remote_1(args):
         np.array(input_list[site]["count_local"]) for site in input_list
     ]
     mean_y_global = np.array(mean_y_local) * np.array(count_y_local)
-    mean_y_global = np.average(mean_y_global, axis=0)
+    mean_y_global = np.sum(
+        mean_y_global, axis=0) / np.sum(
+            count_y_local, axis=0)
 
     dof_global = sum(count_y_local) - avg_beta_vector.shape[1]
 

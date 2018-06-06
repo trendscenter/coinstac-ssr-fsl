@@ -57,7 +57,8 @@ def local_1(args):
 
     lamb = input_list["lambda"]
 
-    beta_vector, local_stats_list, meanY_vector, lenY_vector = local_stats_to_dict_fsl(X, y)
+    beta_vector, local_stats_list, meanY_vector, lenY_vector = local_stats_to_dict_fsl(
+        X, y)
 
     output_dict = {
         "beta_vector_local": beta_vector,
@@ -130,8 +131,7 @@ def local_2(args):
 
         X_, y_ = ignore_nans(biased_X, curr_y)
 
-        SSE_local.append(
-            reg.sum_squared_error(X_, y_, avg_beta_vector[index]))
+        SSE_local.append(reg.sum_squared_error(X_, y_, avg_beta_vector[index]))
         SST_local.append(
             np.sum(np.square(np.subtract(y_, mean_y_global[index]))))
 
