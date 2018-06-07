@@ -166,7 +166,8 @@ def add_site_covariates(args, X):
     site_df = pd.DataFrame(site_matrix, columns=site_covar_list)
 
     select_cols = [
-        col for col in site_df.columns if args["state"]["clientId"] in col
+        col for col in site_df.columns
+        if args["state"]["clientId"] in col[len('site_'):]
     ]
 
     site_df[select_cols] = 1
