@@ -71,8 +71,8 @@ def local_1(args):
     }
 
     cache_dict = {
-        "covariates": X.to_json(orient='records'),
-        "dependents": y.to_json(orient='records'),
+        "covariates": X.to_json(orient='split'),
+        "dependents": y.to_json(orient='split'),
         "lambda": lamb
     }
 
@@ -118,8 +118,8 @@ def local_2(args):
     cache_list = args["cache"]
     input_list = args["input"]
 
-    X = pd.read_json(cache_list["covariates"], orient='records')
-    y = pd.read_json(cache_list["dependents"], orient='records')
+    X = pd.read_json(cache_list["covariates"], orient='split')
+    y = pd.read_json(cache_list["dependents"], orient='split')
     biased_X = sm.add_constant(X.values)
 
     avg_beta_vector = input_list["avg_beta_vector"]
