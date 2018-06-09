@@ -112,46 +112,36 @@ def ignore_nans(X, y):
 
 def local_stats_to_dict_fsl(X, y):
     """Calculate local statistics"""
-    y_labels = list(y.columns)
-
     biased_X = sm.add_constant(X)
     X_labels = list(biased_X.columns)
 
-    local_params = []
-    local_sse = []
-    local_pvalues = []
-    local_tvalues = []
-    local_rsquared = []
     meanY_vector, lenY_vector = [], []
+
+    keys = ["beta", "sse", "tval", "pval", "rsquared", "covariate_labels"]
+    local_stats_list = []
+    beta_vector = []
 
     for column in y.columns:
         curr_y = y[column]
 
         X_, y_ = ignore_nans(biased_X, curr_y)
-        meanY_vector.append(np.mean(y_))
-        lenY_vector.append(len(y_))
 
-        # Printing local stats as well
-        model = sm.OLS(y_, X_).fit()
-        local_params.append(model.params)
-        local_sse.append(model.ssr)
-        local_pvalues.append(model.pvalues)
-        local_tvalues.append(model.tvalues)
-        local_rsquared.append(model.rsquared)
+        try:
+            model = sm.OLS(y_, X_).fit()
+            beta_vector.append(model.params.tolist())
+            meanY_vector.append(np.mean(y_))
 
-    keys = ["beta", "sse", "tval", "pval", "rsquared", "covariate_labels"]
-    local_stats_list = []
-
-    for index, _ in enumerate(y_labels):
-        values = [
-            local_params[index].tolist(), local_sse[index],
-            local_tvalues[index].tolist(), local_pvalues[index].tolist(),
-            local_rsquared[index], X_labels
-        ]
-        local_stats_dict = {key: value for key, value in zip(keys, values)}
-        local_stats_list.append(local_stats_dict)
-
-        beta_vector = [l.tolist() for l in local_params]
+            values = [
+                model.params, model.ssr, model.tvalues, model.pvalues,
+                model.rsquared, X_labels
+            ]
+        except ValueError:
+            values = []
+            beta_vector.append([])
+            meanY_vector.append(np.nan)
+        finally:
+            lenY_vector.append(len(y_))
+            local_stats_list.append(dict(zip(keys, values)))
 
     return beta_vector, local_stats_list, meanY_vector, lenY_vector
 
