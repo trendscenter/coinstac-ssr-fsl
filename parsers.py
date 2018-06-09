@@ -59,13 +59,10 @@ def fsl_parser(args):
     X = X * 1
 
     y_files = y_info[0]
-#    y_labels = y_info[2]
-    y_labels = [
-        'lola', '3rd-Ventricle', '4th-Ventricle', '5th-Ventricle',
-        'lolli-mola', "Left-Lateral-Ventricle", "Left-Inf-Lat-Vent", 'bolli'
-        "Left-Cerebellum-White-Matter", 'lolli'
-        "Left-Cerebellum-Cortex"
-    ]
+    y_labels = y_info[2]
+
+    if not y_labels:
+        y_labels = ['No Region Selected']
 
     y = parse_for_y(args, y_files, y_labels)
 

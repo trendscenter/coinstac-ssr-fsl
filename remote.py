@@ -10,7 +10,6 @@ import scipy as sp
 import numpy as np
 import regression as reg
 import warnings
-from itertools import repeat
 from remote_ancillary import get_stats_to_dict
 
 
@@ -210,18 +209,7 @@ def remote_2(args):
         else:
             global_dict_list.append({})
 
-
-#    # Block of code to print just global stats
-#    keys1 = [
-#        "avg_beta_vector", "r2_global", "ts_global", "ps_global", "dof_global",
-#        "covariate_labels"
-#    ]
-#    global_dict_list = get_stats_to_dict(keys1, avg_beta_vector,
-#                                         r_squared_global, ts_global,
-#                                         ps_global, dof_global,
-#                                         repeat([X_labels], len(y_labels)))
-
-# Block of code to print local stats as well
+    # Block of code to print local stats as well
     sites = [site for site in input_list]
     all_local_stats_dicts = list(map(list, zip(*all_local_stats_dicts)))
 
@@ -238,6 +226,7 @@ def remote_2(args):
     computation_output = {"output": output_dict, "success": True}
 
     return json.dumps(computation_output)
+
 
 if __name__ == '__main__':
 

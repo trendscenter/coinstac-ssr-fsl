@@ -141,7 +141,7 @@ def local_stats_to_dict_fsl(X, y):
         except ValueError:
             values = []
             beta_vector.append([])
-            meanY_vector.append([])
+            meanY_vector.append(0)
         finally:
             lenY_vector.append(len(y_))
             local_stats_list.append(dict(zip(keys, values)))
