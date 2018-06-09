@@ -49,32 +49,41 @@ def remote_1(args):
         input_list[site]["local_stats_dict"] for site in input_list
     ]
 
-    avg_beta_vector = np.average(
-        [
-            np.array(input_list[site]["beta_vector_local"])
-            for site in input_list
-        ],
-        axis=0)
+    a = [input_list[site]["beta_vector_local"] for site in input_list]
+    avg_beta_vector = [
+        np.mean(list(filter(None, element)), axis=0).tolist()
+        for element in zip(*a)
+    ]
 
     mean_y_local = [input_list[site]["mean_y_local"] for site in input_list]
     count_y_local = [
         np.array(input_list[site]["count_local"]) for site in input_list
     ]
-    mean_y_global = np.array(mean_y_local) * np.array(count_y_local)
-    mean_y_global = np.nansum(
-        mean_y_global, axis=0) / np.nansum(
-            count_y_local, axis=0)
 
-    dof_global = sum(count_y_local) - avg_beta_vector.shape[1]
+    mean_y_global = np.array(mean_y_local) * np.array(count_y_local)
+
+    numerator = [
+        np.sum(list(filter(None, elem)), axis=0)
+        for elem in zip(*mean_y_global)
+    ]
+    denominator = [
+        np.sum(list(filter(None, elem)), axis=0)
+        for elem in zip(*count_y_local)
+    ]
+
+    mean_y_global = np.divide(numerator, denominator)
+
+    dof_global = np.subtract(
+        sum(count_y_local), [len(vec) for vec in avg_beta_vector])
 
     output_dict = {
-        "avg_beta_vector": avg_beta_vector.tolist(),
+        "avg_beta_vector": avg_beta_vector,
         "mean_y_global": mean_y_global.tolist(),
         "computation_phase": 'remote_1'
     }
 
     cache_dict = {
-        "avg_beta_vector": avg_beta_vector.tolist(),
+        "avg_beta_vector": avg_beta_vector,
         "mean_y_global": mean_y_global.tolist(),
         "dof_global": dof_global.tolist(),
         "X_labels": X_labels,

@@ -132,13 +132,16 @@ def local_stats_to_dict_fsl(X, y):
             meanY_vector.append(np.mean(y_))
 
             values = [
-                model.params, model.ssr, model.tvalues, model.pvalues,
-                model.rsquared, X_labels
+                model.params.tolist(),
+                model.ssr,
+                model.tvalues.tolist(),
+                model.pvalues.tolist(), model.rsquared, X_labels
             ]
+
         except ValueError:
             values = []
             beta_vector.append([])
-            meanY_vector.append(np.nan)
+            meanY_vector.append([])
         finally:
             lenY_vector.append(len(y_))
             local_stats_list.append(dict(zip(keys, values)))

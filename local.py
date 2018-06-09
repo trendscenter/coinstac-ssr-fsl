@@ -129,13 +129,19 @@ def local_2(args):
     for index, column in enumerate(y.columns):
         curr_y = y[column]
 
-        X_, y_ = ignore_nans(biased_X, curr_y)
+        if not curr_y.isna().all():
+            X_, y_ = ignore_nans(biased_X, curr_y)
 
-        SSE_local.append(reg.sum_squared_error(X_, y_, avg_beta_vector[index]))
-        SST_local.append(
-            np.sum(np.square(np.subtract(y_, mean_y_global[index]))))
+            SSE_local.append(
+                reg.sum_squared_error(X_, y_, avg_beta_vector[index]))
+            SST_local.append(
+                np.sum(np.square(np.subtract(y_, mean_y_global[index]))))
 
-        varX_matrix_local.append(np.dot(X_.T, X_).tolist())
+            varX_matrix_local.append(np.dot(X_.T, X_).tolist())
+        else:
+            SSE_local.append([])
+            SST_local.append([])
+            varX_matrix_local.append([])
 
     output_dict = {
         "SSE_local": SSE_local,
