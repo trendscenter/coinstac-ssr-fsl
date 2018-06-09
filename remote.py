@@ -66,22 +66,7 @@ def remote_1(args):
     mean_y_local = [input_list[site]["mean_y_local"] for site in input_list]
     count_y_local = [input_list[site]["count_y_local"] for site in input_list]
 
-    mean_y_global = np.multiply(mean_y_local, count_y_local)
-
-    numerator = [
-        np.sum(list(filter(None, elem)), axis=0)
-        for elem in zip(*mean_y_global)
-    ]
-    denominator = [
-        np.sum(list(filter(None, elem)), axis=0)
-        for elem in zip(*count_y_local)
-    ]
-
-    mean_y_global = np.divide(
-        np.array(numerator, dtype=float),
-        np.array(denominator, dtype=float),
-        out=np.zeros_like(np.array(numerator, dtype=float)),
-        where=np.array(denominator, dtype=float) != 0)
+    mean_y_global = np.average(mean_y_local, weights=count_y_local, axis=0)
 
     dof_global = np.subtract(
         np.sum(count_y_local, axis=0),
