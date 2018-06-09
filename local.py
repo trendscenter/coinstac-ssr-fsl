@@ -63,7 +63,7 @@ def local_1(args):
     output_dict = {
         "beta_vector_local": beta_vector,
         "mean_y_local": meanY_vector,
-        "count_local": lenY_vector,
+        "count_y_local": lenY_vector,
         "X_labels": X_labels,
         "y_labels": y_labels,
         "local_stats_dict": local_stats_list,
