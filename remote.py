@@ -9,6 +9,7 @@ import sys
 import scipy as sp
 import numpy as np
 import regression as reg
+import warnings
 from itertools import repeat
 from remote_ancillary import get_stats_to_dict
 
@@ -49,11 +50,26 @@ def remote_1(args):
         input_list[site]["local_stats_dict"] for site in input_list
     ]
 
-    a = [input_list[site]["beta_vector_local"] for site in input_list]
-    avg_beta_vector = [
-        np.mean(list(filter(None, element)), axis=0).tolist()
-        for element in zip(*a)
+    beta_vector_local = [
+        input_list[site]["beta_vector_local"] for site in input_list
     ]
+
+    #    avg_beta_vector = [
+    #        np.mean(list(filter(None, element)), axis=0).tolist()
+    #        for element in zip(*beta_vector_local)
+    #    ]
+
+    avg_beta_vector = []
+    with warnings.catch_warnings():
+        warnings.simplefilter("error")
+        for element in zip(*beta_vector_local):
+            try:
+                avg_beta_vector.append(
+                    np.mean(list(filter(None, element)), axis=0).tolist())
+            except RuntimeWarning:
+                avg_beta_vector.append([])
+
+    raise Exception(avg_beta_vector)
 
     mean_y_local = [input_list[site]["mean_y_local"] for site in input_list]
     count_y_local = [
@@ -74,7 +90,8 @@ def remote_1(args):
     mean_y_global = np.divide(numerator, denominator)
 
     dof_global = np.subtract(
-        sum(count_y_local), [len(vec) for vec in avg_beta_vector])
+        sum(count_y_local),
+        [len(vec) if type(vec) is list else 0 for vec in avg_beta_vector])
 
     output_dict = {
         "avg_beta_vector": avg_beta_vector,
@@ -150,16 +167,27 @@ def remote_2(args):
     avg_beta_vector = cache_list["avg_beta_vector"]
     dof_global = cache_list["dof_global"]
 
-    SSE_global = sum(
-        [np.array(input_list[site]["SSE_local"]) for site in input_list])
-    SST_global = sum(
-        [np.array(input_list[site]["SST_local"]) for site in input_list])
-    varX_matrix_global = sum([
-        np.array(input_list[site]["varX_matrix_local"]) for site in input_list
-    ])
+    SSE_local = [input_list[site]["SSE_local"] for site in input_list]
+    SSE_global = [
+        np.sum(list(filter(None, elem)), axis=0) for elem in zip(*SSE_local)
+    ]
 
-    r_squared_global = 1 - (SSE_global / SST_global)
-    MSE = SSE_global / np.array(dof_global)
+    SST_local = [input_list[site]["SST_local"] for site in input_list]
+    SST_global = [
+        np.sum(list(filter(None, elem)), axis=0) for elem in zip(*SST_local)
+    ]
+
+    varX_matrix_local = [
+        input_list[site]["varX_matrix_local"] for site in input_list
+    ]
+    varX_matrix_global = [
+        np.sum(list(filter(None, elem)), axis=0)
+        for elem in zip(*varX_matrix_local)
+    ]
+
+    r_squared_global = 1 - np.divide(SSE_global, SST_global)
+    MSE = np.divide(SSE_global, dof_global)
+    raise Exception(MSE)
 
     ts_global = []
     ps_global = []
