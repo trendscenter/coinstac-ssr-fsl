@@ -180,7 +180,7 @@ def remote_2(args):
     global_dict_list = get_stats_to_dict(keys1, avg_beta_vector,
                                          r_squared_global, ts_global,
                                          ps_global, dof_global,
-                                         repeat([X_labels], len(y_labels)))
+                                         repeat(X_labels, len(y_labels)))
 
     # Print Everything
     keys2 = ["ROI", "global_stats", "local_stats"]
