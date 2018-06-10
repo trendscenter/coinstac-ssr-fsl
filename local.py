@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-This script includes the local computations for single-shot ridge
+This script includes local computations for single-shot ridge
 regression with decentralized statistic calculation
 """
 import ujson as json
@@ -26,15 +26,17 @@ def local_1(args):
                                 "covariates": ,
                                  "data": ,
                                  "lambda": ,
-                                },
-                            "cache": {}
+                                }
                             }
 
     Returns:
-        computation_output(json) : {"output": {
+        computation_output (json) : {"output": {
                                         "beta_vector_local": ,
+                                        "local_stats_dict": ,
                                         "mean_y_local": ,
-                                        "count_local": ,
+                                        "count_y_local": ,
+                                        "X_labels": ,
+                                        "y_labels": ,
                                         "computation_phase":
                                         },
                                     "cache": {
@@ -57,16 +59,16 @@ def local_1(args):
 
     lamb = input_list["lambda"]
 
-    beta_vector, local_stats_list, meanY_vector, lenY_vector = local_stats_to_dict_fsl(
-        X, y)
+    t = local_stats_to_dict_fsl(X, y)
+    beta_vector, local_stats_list, meanY_vector, lenY_vector = t
 
     output_dict = {
         "beta_vector_local": beta_vector,
+        "local_stats_dict": local_stats_list,
         "mean_y_local": meanY_vector,
         "count_y_local": lenY_vector,
         "X_labels": X_labels,
         "y_labels": y_labels,
-        "local_stats_dict": local_stats_list,
         "computation_phase": 'local_1',
     }
 
@@ -96,8 +98,7 @@ def local_2(args):
                             "cache": {
                                 "covariates": ,
                                 "dependents": ,
-                                "lambda": ,
-                                "dof_local": ,
+                                "lambda":
                                 }
                             }
 
@@ -111,8 +112,10 @@ def local_2(args):
                                     }
 
     Comments:
-        After receiving  the mean_y_global, calculate the SSE_local,
-        SST_local and varX_matrix_local
+        After receiving  the mean_y_global, calculate
+        a) SSE_local,
+        b) SST_local and
+        c) varX_matrix_local
 
     """
     cache_list = args["cache"]

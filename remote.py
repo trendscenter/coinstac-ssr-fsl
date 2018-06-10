@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-This script includes the remote computations for single-shot ridge
+This script includes remote computations for single-shot ridge
 regression with decentralized statistic calculation
 """
 import ujson as json
@@ -35,7 +35,10 @@ def remote_1(args):
                                     "cache": {
                                         "avg_beta_vector": ,
                                         "mean_y_global": ,
-                                        "dof_global":
+                                        "dof_global": ,
+                                        "X_labels": ,
+                                        "y_labels": ,
+                                        "local_stats_dict":
                                         },
                                     }
 
@@ -66,7 +69,10 @@ def remote_1(args):
     mean_y_local = [input_list[site]["mean_y_local"] for site in input_list]
     count_y_local = [input_list[site]["count_y_local"] for site in input_list]
 
-    mean_y_global = np.average(mean_y_local, weights=count_y_local, axis=0)
+    mean_y_global = np.ma.average(
+        np.ma.masked_array(mean_y_local, not np.nonzero(mean_y_local)),
+        weights=count_y_local,
+        axis=0).filled(0)
 
     dof_global = np.subtract(
         np.sum(count_y_local, axis=0),

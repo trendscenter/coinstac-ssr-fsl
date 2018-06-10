@@ -8,7 +8,6 @@ Left-Caudate	4965.98
 Left-Putamen	6941.85
 Left-Pallidum	5256.07
 3rd-Ventricle	4825.40
-4th-Ventricle	3673.02
 Brain-Stem	13127.41
 Left-Hippocampus	1977.05
 Left-Amygdala	9019.83
