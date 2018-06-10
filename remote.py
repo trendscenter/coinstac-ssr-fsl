@@ -173,9 +173,6 @@ def remote_2(args):
     r_squared_global = 1 - np.divide(SSE_global, SST_global)
     MSE = np.divide(SSE_global, dof_global)
 
-    ts_global = []
-    ps_global = []
-
     keys1 = [
         "avg_beta_vector", "r2_global", "ts_global", "ps_global", "dof_global",
         "covariate_labels"
@@ -189,8 +186,6 @@ def remote_2(args):
             se_beta_global = np.sqrt(var_covar_beta_global.diagonal())
             ts = (avg_beta_vector[i] / se_beta_global).tolist()
             ps = reg.t_to_p(ts, dof_global[i])
-            ts_global.append(ts)
-            ps_global.append(ps)
 
             vals = [
                 avg_beta_vector[i], r_squared_global[i], ts, ps, dof_global[i],
