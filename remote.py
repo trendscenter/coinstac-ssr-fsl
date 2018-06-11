@@ -174,7 +174,7 @@ def remote_2(args):
 
     # Block of code to print just global stats
     keys1 = [
-        "avg_beta_vector", "r2_global", "ts_global", "ps_global", "dof_global",
+        "Coefficient", "R Squared", "t Stat", "P-value", "Degrees of Freedom",
         "covariate_labels"
     ]
     global_dict_list = get_stats_to_dict(keys1, avg_beta_vector,
