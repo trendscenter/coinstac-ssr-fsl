@@ -82,10 +82,7 @@ def remote_1(args):
         "local_stats_dict": all_local_stats_dicts
     }
 
-    computation_output = {
-        "output": output_dict,
-        "cache": cache_dict,
-    }
+    computation_output = {"output": output_dict, "cache": cache_dict}
 
     return json.dumps(computation_output)
 

@@ -76,10 +76,7 @@ def local_1(args):
         "lambda": lamb
     }
 
-    computation_output = {
-        "output": output_dict,
-        "cache": cache_dict,
-    }
+    computation_output = {"output": output_dict, "cache": cache_dict}
 
     return json.dumps(computation_output)
 
