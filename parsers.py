@@ -5,10 +5,10 @@ Created on Wed Mar 21 19:25:26 2018
 
 @author: Harshvardhan
 """
-import os
-import pandas as pd
 import nibabel as nib
 import numpy as np
+import os
+import pandas as pd
 
 
 def parse_for_y(args, y_files, y_labels):
