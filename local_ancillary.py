@@ -70,7 +70,9 @@ def local_stats_to_dict_vbm(X, y):
 
     pvalues = 2 * sp.stats.t.sf(np.abs(tvalues), dof_global)
 
-    keys = ["Coefficient", "Sum Square of Errors", "t Stat", "P-value", "R Squared"]
+    keys = [
+        "Coefficient", "Sum Square of Errors", "t Stat", "P-value", "R Squared"
+    ]
 
     values1 = pd.DataFrame(
         list(
@@ -87,7 +89,7 @@ def local_stats_to_dict_vbm(X, y):
 
 
 def ignore_nans(X, y):
-    # Removing rows containing NaN's in X and y
+    """Removing rows containing NaN's in X and y"""
 
     if type(X) is pd.DataFrame:
         X_ = X.values.astype('float64')
