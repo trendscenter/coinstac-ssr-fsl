@@ -4,11 +4,11 @@
 This script includes the remote computations for single-shot ridge
 regression with decentralized statistic calculation
 """
-import ujson as json
-import sys
-import scipy as sp
 import numpy as np
 import regression as reg
+import sys
+import scipy as sp
+import ujson as json
 from itertools import repeat
 from remote_ancillary import get_stats_to_dict
 
