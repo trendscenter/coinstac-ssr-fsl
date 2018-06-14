@@ -8,6 +8,7 @@ Created on Wed Mar 21 19:25:26 2018
 import os
 import pandas as pd
 import nibabel as nib
+import numpy as np
 
 
 def parse_for_y(args, y_files, y_labels):
@@ -61,9 +62,6 @@ def fsl_parser(args):
     y_files = y_info[0]
     y_labels = y_info[2]
 
-    if not y_labels:
-        y_labels = ['No Region Selected']
-
     y = parse_for_y(args, y_files, y_labels)
 
     X = X.reindex(sorted(X.columns), axis=1)
@@ -80,22 +78,36 @@ def fsl_parser(args):
     return (X, y)
 
 
-def nifti_to_data(args, X_files, y_files):
+def nifti_to_data(args, X):
     """Read nifti files as matrices"""
-    mask_file = os.path.join(args["state"]["baseDirectory"], 'mask_6mm.nii')
-    mask_data = nib.load(mask_file).get_data()
+    try:
+        mask_file = os.path.join(args["state"]["baseDirectory"],
+                                 'mask_6mm.nii')
+        mask_data = nib.load(mask_file).get_data()
+    except FileNotFoundError:
+        raise Exception("Missing Mask at " + args["state"]["clientId"])
 
     appended_data = []
 
     # Extract Data (after applying mask)
-    for image in X_files:
-        if image in y_files:
+    for image in X.index:
+        try:
             image_data = nib.load(
                 os.path.join(args["state"]["baseDirectory"],
                              image)).get_data()
-            appended_data.append(image_data[mask_data > 0])
+            if np.all(np.isnan(image_data)) or np.count_nonzero(
+                    image_data) == 0 or image_data.size == 0:
+                X.drop(index=image, inplace=True)
+                continue
+            else:
+                appended_data.append(image_data[mask_data > 0])
+        except FileNotFoundError:
+            X.drop(index=image, inplace=True)
+            continue
 
-    return appended_data
+    y = pd.DataFrame.from_records(appended_data)
+
+    return X, y
 
 
 def vbm_parser(args):
@@ -103,27 +115,23 @@ def vbm_parser(args):
     covariate matrix (X) as well the dependent matrix (y) as dataframes"""
     input_list = args["input"]
     X_info = input_list["covariates"]
-    y_info = input_list["data"]
 
     X_data = X_info[0][0]
     X_labels = X_info[1]
-    #    X_types = X_info[2]
 
     X_df = pd.DataFrame.from_records(X_data)
     X_df.columns = X_df.iloc[0]
     X_df = X_df.reindex(X_df.index.drop(0))
-
-    X_files = list(X_df['niftifile'])
+    X_df.set_index(X_df.columns[0], inplace=True)
 
     X = X_df[X_labels]
     X = X.apply(pd.to_numeric, errors='ignore')
     X = pd.get_dummies(X, drop_first=True)
     X = X * 1
 
-    y_files = y_info[0]
+    X.dropna(axis=0, how='any', inplace=True)
 
-    y_list = nifti_to_data(args, X_files, y_files)
-    y = pd.DataFrame.from_records(y_list)
+    X, y = nifti_to_data(args, X)
 
     y.columns = ['{}_{}'.format('voxel', str(i)) for i in y.columns]
 
