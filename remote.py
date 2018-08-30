@@ -11,7 +11,8 @@ import scipy as sp
 import ujson as json
 from itertools import repeat
 from remote_ancillary import get_stats_to_dict
-
+import warnings
+warnings.simplefilter("ignore")
 
 def remote_1(args):
     """Computes the global beta vector, mean_y_global & dof_global

@@ -12,7 +12,7 @@ import ujson as json
 import warnings
 from parsers import fsl_parser
 from local_ancillary import local_stats_to_dict_fsl, ignore_nans
-
+warnings.simplefilter("ignore")
 with warnings.catch_warnings():
     warnings.simplefilter("ignore")
     import statsmodels.api as sm

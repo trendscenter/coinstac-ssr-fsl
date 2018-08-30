@@ -11,7 +11,8 @@ from nilearn import plotting
 import numpy as np
 import os
 import pandas as pd
-
+import warnings
+warnings.simplefilter("ignore")
 
 def get_stats_to_dict(a, *b):
     df = pd.DataFrame(list(zip(*b)), columns=a)

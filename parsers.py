@@ -9,7 +9,8 @@ import nibabel as nib
 import numpy as np
 import os
 import pandas as pd
-
+import warnings
+warnings.simplefilter("ignore")
 
 def parse_for_y(args, y_files, y_labels):
     """Read contents of fsl files into a dataframe"""
@@ -60,7 +61,7 @@ def fsl_parser(args):
     X = X * 1
 
     y_files = y_info[0]
-    y_labels = y_info[2]
+    y_labels = y_info[2][0:10]
 
     y = parse_for_y(args, y_files, y_labels)
 

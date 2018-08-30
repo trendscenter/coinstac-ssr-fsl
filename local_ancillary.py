@@ -11,7 +11,8 @@ import pandas as pd
 import scipy as sp
 import warnings
 from numba import jit, prange
-
+warnings.simplefilter("ignore")
+    
 with warnings.catch_warnings():
     warnings.simplefilter("ignore")
     import statsmodels.api as sm

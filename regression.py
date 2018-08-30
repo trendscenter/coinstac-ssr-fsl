@@ -8,7 +8,7 @@ import numpy as np
 import scipy as sp
 import warnings
 from scipy import stats
-
+warnings.simplefilter("ignore")
 with warnings.catch_warnings():
     warnings.simplefilter("ignore")
     import statsmodels.api as sm
