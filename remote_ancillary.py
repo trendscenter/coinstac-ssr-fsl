@@ -5,12 +5,14 @@ Created on Sat Apr 14 14:56:41 2018
 
 @author: Harshvardhan
 """
+import warnings
+warnings.simplefilter("ignore")
 
 import nibabel as nib
-from nilearn import plotting
 import numpy as np
 import os
 import pandas as pd
+from nilearn import plotting
 
 
 def get_stats_to_dict(a, *b):

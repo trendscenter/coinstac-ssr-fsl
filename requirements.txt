@@ -1,6 +1,6 @@
 matplotlib
-nilearn
+nilearn==0.4.2
 numba
 scikit-learn
-statsmodels==0.8.0
+statsmodels
 ujson

@@ -4,18 +4,17 @@
 This script includes the local computations for single-shot ridge
 regression with decentralized statistic calculation
 """
+import warnings
+warnings.simplefilter("ignore")
+
 import numpy as np
 import pandas as pd
 import regression as reg
+import statsmodels.api as sm
 import sys
 import ujson as json
-import warnings
 from parsers import fsl_parser
 from local_ancillary import local_stats_to_dict_fsl, ignore_nans
-
-with warnings.catch_warnings():
-    warnings.simplefilter("ignore")
-    import statsmodels.api as sm
 
 
 def local_1(args):
@@ -77,7 +76,7 @@ def local_1(args):
     }
 
     computation_output = {"output": output_dict, "cache": cache_dict}
-
+    
     return json.dumps(computation_output)
 
 
