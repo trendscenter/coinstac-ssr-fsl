@@ -2,5 +2,5 @@ matplotlib
 nilearn
 numba
 scikit-learn
-statsmodels==0.8.0
+statsmodels
 ujson
