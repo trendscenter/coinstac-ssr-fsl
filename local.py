@@ -76,7 +76,7 @@ def local_1(args):
     }
 
     computation_output = {"output": output_dict, "cache": cache_dict}
-    
+
     return json.dumps(computation_output)
 
 
@@ -147,8 +147,7 @@ def local_2(args):
     return json.dumps(computation_output)
 
 
-if __name__ == '__main__':
-
+def main():
     parsed_args = json.loads(sys.stdin.read())
     phase_key = list(reg.list_recursive(parsed_args, 'computation_phase'))
 
@@ -160,3 +159,7 @@ if __name__ == '__main__':
         sys.stdout.write(computation_output)
     else:
         raise ValueError("Error occurred at Local")
+
+
+if __name__ == '__main__':
+    main()

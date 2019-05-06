@@ -136,3 +136,11 @@ def vbm_parser(args):
     y.columns = ['{}_{}'.format('voxel', str(i)) for i in y.columns]
 
     return (X, y)
+
+
+def main():
+    print('Contains parsing functions')
+    
+
+if __name__ == '__main__':
+    main()

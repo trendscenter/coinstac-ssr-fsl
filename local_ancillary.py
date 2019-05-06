@@ -181,3 +181,11 @@ def add_site_covariates(args, X):
     augmented_X = pd.concat([biased_X, site_df], axis=1)
 
     return augmented_X
+
+
+def main():
+    print('Contains ancillary functions for local computations')
+
+
+if __name__ == '__main__':
+    main()

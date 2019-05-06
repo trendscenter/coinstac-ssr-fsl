@@ -49,21 +49,18 @@ def remote_1(args):
         input_list[site]["local_stats_dict"] for site in input_list
     ]
 
-    avg_beta_vector = np.average(
-        [
-            np.array(input_list[site]["beta_vector_local"])
-            for site in input_list
-        ],
-        axis=0)
+    avg_beta_vector = np.average([
+        np.array(input_list[site]["beta_vector_local"]) for site in input_list
+    ],
+                                 axis=0)
 
     mean_y_local = [input_list[site]["mean_y_local"] for site in input_list]
     count_y_local = [
         np.array(input_list[site]["count_local"]) for site in input_list
     ]
     mean_y_global = np.array(mean_y_local) * np.array(count_y_local)
-    mean_y_global = np.sum(
-        mean_y_global, axis=0) / np.sum(
-            count_y_local, axis=0)
+    mean_y_global = np.sum(mean_y_global, axis=0) / np.sum(count_y_local,
+                                                           axis=0)
 
     dof_global = sum(count_y_local) - avg_beta_vector.shape[1]
 
@@ -190,8 +187,7 @@ def remote_2(args):
     return json.dumps(computation_output)
 
 
-if __name__ == '__main__':
-
+def main():
     parsed_args = json.loads(sys.stdin.read())
     phase_key = list(reg.list_recursive(parsed_args, 'computation_phase'))
 
@@ -203,3 +199,7 @@ if __name__ == '__main__':
         sys.stdout.write(computation_output)
     else:
         raise ValueError("Error occurred at Remote")
+
+
+if __name__ == '__main__':
+    main()

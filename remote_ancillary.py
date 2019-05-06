@@ -13,3 +13,11 @@ def get_stats_to_dict(a, *b):
     dict_list = df.to_dict(orient='records')
 
     return dict_list
+
+
+def main():
+    print('Contains ancillary functions for remote computations')
+
+
+if __name__ == '__main__':
+    main()
