@@ -30,18 +30,17 @@ def run_function(loc, key, args):
         raise Exception('Location has to be either local or remote')
 
 
-def get_phase_key(parsed_args):
-    phase_key = list(list_recursive(parsed_args, 'computation_phase'))
+def get_unique_phase_key(phase_key):
     unique_phase_key = list(set(phase_key))
 
     if len(unique_phase_key) > 1:
         raise Exception('Phase Key is not unique')
     elif not len(unique_phase_key):
-        phase_key = 'start'
+        key = 'start'
     else:
-        phase_key = unique_phase_key[0]
+        key = unique_phase_key[0]
 
-    return phase_key
+    return key
 
 
 def read_input():
@@ -50,5 +49,6 @@ def read_input():
 
 def main(location):
     parsed_args = read_input()
-    phase_key = get_phase_key(parsed_args)
-    run_function(location, phase_key, parsed_args)
+    phase_key = list_recursive(parsed_args, 'computation_phase')
+    unique_phase_key = get_unique_phase_key(phase_key)
+    run_function(location, unique_phase_key, parsed_args)
