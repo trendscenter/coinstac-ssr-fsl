@@ -16,13 +16,12 @@ def main():
 
     if not phase_key:
         computation_output = local_1(parsed_args)
-        sys.stdout.write(computation_output)
     elif "remote_1" in phase_key:
         computation_output = local_2(parsed_args)
-        sys.stdout.write(computation_output)
     else:
         raise ValueError("Error occurred at Local")
 
+    sys.stdout.write(computation_output)
 
 if __name__ == '__main__':
     main()
