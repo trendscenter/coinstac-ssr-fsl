@@ -83,11 +83,9 @@ def print_pvals(args, ps_global, ts_global, X_labels):
                                display_mode='ortho',
                                colorbar=True)
 
-
 def main():
-    print(
-        'Contains ancillary functions for both local and remote computations')
-  
-    
+    print('do nothing')
+
+
 if __name__ == '__main__':
     main()
