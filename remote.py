@@ -6,17 +6,18 @@ regression with decentralized statistic calculation
 """
 import sys
 import ujson as json
-from ancillary import list_recursive
+from ancillary import list_recursive, get_unique_phase_key
 from remote_funcs import remote_1 ,remote_2
 
 
 def main():
     parsed_args = json.loads(sys.stdin.read())
-    phase_key = list(list_recursive(parsed_args, 'computation_phase'))
+    phase_keys = list_recursive(parsed_args, 'computation_phase')
+    unique_phase_key = get_unique_phase_key(phase_keys)
 
-    if "local_1" in phase_key:
+    if "local_1" in unique_phase_key:
         computation_output = remote_1(parsed_args)
-    elif "local_2" in phase_key:
+    elif "local_2" in unique_phase_key:
         computation_output = remote_2(parsed_args)
     else:
         raise ValueError("Error occurred at Remote")

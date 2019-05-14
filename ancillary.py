@@ -26,6 +26,19 @@ def list_recursive(d, key):
             yield v
 
 
+def get_unique_phase_key(phase_key):
+    unique_key = list(set(phase_key))
+
+    if len(unique_key) > 1:
+        raise Exception('Phase Key is not unique')
+    elif not len(unique_key):
+        key = None
+    else:
+        key = unique_key[0]
+
+    return key
+
+
 def encode_png(args):
     # Begin code to serialize png images
     png_files = sorted(os.listdir(args["state"]["outputDirectory"]))
