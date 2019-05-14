@@ -14,6 +14,7 @@ import statsmodels.api as sm
 import sys
 import ujson as json
 from parsers import fsl_parser
+from ancillary import list_recursive
 from local_ancillary import local_stats_to_dict_fsl, ignore_nans
 
 
@@ -149,7 +150,7 @@ def local_2(args):
 
 def main():
     parsed_args = json.loads(sys.stdin.read())
-    phase_key = list(reg.list_recursive(parsed_args, 'computation_phase'))
+    phase_key = list(list_recursive(parsed_args, 'computation_phase'))
 
     if not phase_key:
         computation_output = local_1(parsed_args)

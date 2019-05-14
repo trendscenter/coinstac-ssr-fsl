@@ -10,6 +10,7 @@ import sys
 import scipy as sp
 import ujson as json
 from itertools import repeat
+from ancillary import list_recursive
 from remote_ancillary import get_stats_to_dict
 
 
@@ -189,7 +190,7 @@ def remote_2(args):
 
 def main():
     parsed_args = json.loads(sys.stdin.read())
-    phase_key = list(reg.list_recursive(parsed_args, 'computation_phase'))
+    phase_key = list(list_recursive(parsed_args, 'computation_phase'))
 
     if "local_1" in phase_key:
         computation_output = remote_1(parsed_args)

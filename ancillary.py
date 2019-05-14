@@ -17,6 +17,15 @@ np.seterr(divide='ignore')
 MASK = os.path.join('/computation', 'mask_4mm.nii')
 
 
+def list_recursive(d, key):
+    for k, v in d.items():
+        if isinstance(v, dict):
+            for found in list_recursive(v, key):
+                yield found
+        if k == key:
+            yield v
+
+
 def encode_png(args):
     # Begin code to serialize png images
     png_files = sorted(os.listdir(args["state"]["outputDirectory"]))
@@ -87,7 +96,7 @@ def print_pvals(args, ps_global, ts_global, X_labels):
 def main():
     print(
         'Contains ancillary functions for both local and remote computations')
-  
-    
+
+
 if __name__ == '__main__':
     main()
