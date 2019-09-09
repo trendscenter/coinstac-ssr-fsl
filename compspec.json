@@ -1,21 +1,21 @@
 {
   "meta": {
     "name": "single shot regression demo",
-    "id": "ssr_fsl",
+    "id": "ssr-fsl",
     "version": "v1.0.0",
     "repository": "https:\/\/github.com\/MRN-Code\/coinstac_ssr_fsl",
     "description": "Single shot regresssion on FreeSurfer Data"
   },
   "computation": {
     "type": "docker",
-    "dockerImage": "ssr_fsl",
+    "dockerImage": "ssr-fsl",
     "command": [
       "python",
       "\/computation\/local.py"
     ],
     "remote": {
       "type": "docker",
-      "dockerImage": "ssr_fsl",
+      "dockerImage": "ssr-fsl",
       "command": [
         "python",
         "\/computation\/remote.py"
