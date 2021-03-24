@@ -9,12 +9,12 @@ warnings.simplefilter("ignore")
 
 import numpy as np
 import pandas as pd
-import regression as reg
+import scripts.regression as reg
 import statsmodels.api as sm
 import ujson as json
 import fslparser
 from fslparser import parsers
-from local_ancillary import local_stats_to_dict_fsl, ignore_nans
+from scripts.local_ancillary import local_stats_to_dict_fsl, ignore_nans
 
 
 def local_1(args):
