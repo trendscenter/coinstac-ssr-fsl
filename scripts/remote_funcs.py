@@ -80,7 +80,7 @@ def remote_1(args):
 
     computation_output = {"output": output_dict, "cache": cache_dict}
 
-    return json.dumps(computation_output)
+    return computation_output
 
 
 def remote_2(args):
@@ -183,4 +183,4 @@ def remote_2(args):
 
     computation_output = {"output": output_dict, "success": True}
 
-    return json.dumps(computation_output)
+    return computation_output

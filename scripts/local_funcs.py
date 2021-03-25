@@ -77,7 +77,7 @@ def local_1(args):
 
     computation_output = {"output": output_dict, "cache": cache_dict}
 
-    return json.dumps(computation_output)
+    return computation_output
 
 
 def local_2(args):
@@ -144,4 +144,4 @@ def local_2(args):
 
     computation_output = {"output": output_dict, "cache": cache_dict}
 
-    return json.dumps(computation_output)
+    return computation_output
