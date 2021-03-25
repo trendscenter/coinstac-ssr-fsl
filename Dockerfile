@@ -1,4 +1,4 @@
-FROM coinstacteam/coinstac-base
+FROM python:3.7.8
 
 # Set the working directory
 WORKDIR /computation
@@ -11,3 +11,5 @@ RUN pip install -r requirements.txt
 
 # Copy the current directory contents into the container
 COPY . /computation
+
+CMD ["python", "entry.py"]

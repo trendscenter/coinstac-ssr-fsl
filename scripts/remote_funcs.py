@@ -5,11 +5,11 @@ This script includes the remote computations for single-shot ridge
 regression with decentralized statistic calculation
 """
 import numpy as np
-import regression as reg
+import scripts.regression as reg
 import scipy as sp
 import ujson as json
 from itertools import repeat
-from remote_ancillary import get_stats_to_dict
+from scripts.remote_ancillary import get_stats_to_dict
 
 
 def remote_1(args):
@@ -80,7 +80,7 @@ def remote_1(args):
 
     computation_output = {"output": output_dict, "cache": cache_dict}
 
-    return json.dumps(computation_output)
+    return computation_output
 
 
 def remote_2(args):
@@ -183,4 +183,4 @@ def remote_2(args):
 
     computation_output = {"output": output_dict, "success": True}
 
-    return json.dumps(computation_output)
+    return computation_output
