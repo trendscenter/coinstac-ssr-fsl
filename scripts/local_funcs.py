@@ -12,8 +12,7 @@ import pandas as pd
 import regression as reg
 import statsmodels.api as sm
 import ujson as json
-import fslparser
-from fslparser import parsers
+import parsers
 from local_ancillary import local_stats_to_dict_fsl, ignore_nans
 
 
@@ -50,7 +49,6 @@ def local_1(args):
     """
     input_list = args["input"]
     (X, y) = parsers.fsl_parser(args)
-
     X_labels = ['const'] + list(X.columns)
     y_labels = list(y.columns)
 

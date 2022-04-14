@@ -4,4 +4,4 @@ numba
 scikit-learn==0.20.3
 statsmodels
 ujson
-fslparser==0.0.2
+#fslparser==0.0.2
