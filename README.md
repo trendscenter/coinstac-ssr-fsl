@@ -1,5 +1,5 @@
 # coinstac_ssr_fsl_2
-Coinstac Code for Single-Shot Regression (ssr) on FSL Data
+Coinstac Code for Single-Shot Regression (ssr) on FreeSurfer Data
 
 Tools: Python 3.6.5, coinstac-simulator 4.2.0
 
