@@ -9,7 +9,7 @@ import regression as reg
 import scipy as sp
 import ujson as json
 from itertools import repeat
-from remote_ancillary import get_stats_to_dict
+from remote_ancillary import get_stats_to_dict, persist_stats
 
 
 def remote_1(args):
@@ -39,7 +39,7 @@ def remote_1(args):
                                     }
 
     """
-    input_list = args["input"]
+    input_list = dict(sorted(args["input"].items()))
     userId = list(input_list)[0]
     X_labels = input_list[userId]["X_labels"]
     y_labels = input_list[userId]["y_labels"]
@@ -123,13 +123,11 @@ def remote_2(args):
                   the variable had no effect.)
 
     """
-    input_list = args["input"]
+    input_list = dict(sorted(args["input"].items()))
     cache_list = args["cache"]
 
     X_labels = args["cache"]["X_labels"]
     y_labels = args["cache"]["y_labels"]
-
-    all_local_stats_dicts = args["cache"]["local_stats_dict"]
 
     avg_beta_vector = cache_list["avg_beta_vector"]
     dof_global = cache_list["dof_global"]
@@ -159,7 +157,11 @@ def remote_2(args):
     # Block of code to print local stats as well
     sites = [site for site in input_list]
 
-    all_local_stats_dicts = list(map(list, zip(*all_local_stats_dicts)))
+    all_local_stats_dicts_old = args["cache"]["local_stats_dict"]
+    # Save local node stats as csv "localXXX.csv" in the output directory and transfer it to the other nodes
+    persist_stats(y_labels, sites, all_local_stats_dicts_old, [args["state"]["outputDirectory"], args["state"]["transferDirectory"]])
+
+    all_local_stats_dicts = list(map(list, zip(*all_local_stats_dicts_old)))
 
     a_dict = [{key: value
                for key, value in zip(sites, stats_dict)}
@@ -174,6 +176,10 @@ def remote_2(args):
                                          r_squared_global, ts_global,
                                          ps_global, dof_global,
                                          repeat(X_labels, len(y_labels)))
+
+    # Save global statas as csv "global.csv" in the output directory and transfer it to the other nodes
+    persist_stats(y_labels, ['global'], [global_dict_list],
+                  [args["state"]["outputDirectory"], args["state"]["transferDirectory"]])
 
     # Print Everything
     keys2 = ["ROI", "global_stats", "local_stats"]
