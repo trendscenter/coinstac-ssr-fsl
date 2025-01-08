@@ -14,6 +14,7 @@ import statsmodels.api as sm
 import ujson as json
 import parsers
 from local_ancillary import local_stats_to_dict_fsl, ignore_nans
+import utils as ut
 
 
 def local_1(args):
@@ -74,6 +75,7 @@ def local_1(args):
     }
 
     computation_output = {"output": output_dict, "cache": cache_dict}
+    ut.log(f'\nY local_1() output: {str(computation_output)}', args["state"])
 
     return json.dumps(computation_output)
 
@@ -141,5 +143,8 @@ def local_2(args):
     cache_dict = {}
 
     computation_output = {"output": output_dict, "cache": cache_dict}
+    ut.log(f'\nY local_1() output: {str(computation_output)}', args["state"])
+
 
     return json.dumps(computation_output)
+
