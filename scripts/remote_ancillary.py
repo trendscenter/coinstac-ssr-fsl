@@ -39,7 +39,7 @@ def persist_stats(roi_names, site_names, site_stats, persist_dirs):
 
         #Save the dataframe as csv file
         for dir_name in persist_dirs:
-            new_df.to_csv(os.path.join(dir_name, site_name+"_stats.csv"))
+            new_df.to_csv(os.path.join(dir_name, site_name+"_stats.csv"),  index_label = 'ROI')
 
 
 def main():
