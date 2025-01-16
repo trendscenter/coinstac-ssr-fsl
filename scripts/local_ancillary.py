@@ -13,6 +13,7 @@ import pandas as pd
 import scipy as sp
 import statsmodels.api as sm
 from numba import jit, prange
+import regression as reg
 
 
 def mean_and_len_y(y):
@@ -110,7 +111,7 @@ def ignore_nans(X, y):
     return X_, y_
 
 
-def local_stats_to_dict_fsl(X, y):
+def local_stats_to_dict_fsl(X, y, lamb):
     """Calculate local statistics"""
     y_labels = list(y.columns)
 
@@ -132,7 +133,9 @@ def local_stats_to_dict_fsl(X, y):
         lenY_vector.append(len(y_))
 
         # Printing local stats as well
-        model = sm.OLS(y_, X_).fit()
+        # model = sm.OLS(y_, X_).fit()
+        model = reg.one_shot_regression(X_, y_, lamb)
+
         local_params.append(model.params)
         local_sse.append(model.ssr)
         local_pvalues.append(model.pvalues)

@@ -55,7 +55,7 @@ def local_1(args):
 
     lamb = input_list["lambda"]
 
-    t = local_stats_to_dict_fsl(X, y)
+    t = local_stats_to_dict_fsl(X, y, lamb)
     beta_vector, local_stats_list, meanY_vector, lenY_vector = t
 
     output_dict = {
