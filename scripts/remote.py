@@ -5,7 +5,7 @@ This script includes the remote computations for single-shot ridge
 regression with decentralized statistic calculation
 """
 import sys
-import ujson as json
+import simplejson as json
 from ancillary import list_recursive, get_unique_phase_key
 from remote_funcs import remote_1 ,remote_2
 

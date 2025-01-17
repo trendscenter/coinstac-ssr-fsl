@@ -8,6 +8,7 @@ import numpy as np
 import scipy as sp
 import warnings
 from scipy import stats
+import utils as ut
 
 with warnings.catch_warnings():
     warnings.simplefilter("ignore")
@@ -15,7 +16,7 @@ with warnings.catch_warnings():
     from statsmodels.tools.tools import pinv_extended
 
 
-def one_shot_regression(X, y, lamb):
+def one_shot_regression(X, y, lamb, use_regularization_fit=True):
     """Performs ridge regression
 
     Args:
@@ -43,12 +44,17 @@ def one_shot_regression(X, y, lamb):
     #    result = clf.fit(X, y)
     #    beta_vector = np.insert(result.coef_, 0, result.intercept_)
     model = sm.OLS(y, X.astype(float))
-    reg_fit = model.fit_regularized(alpha=lamb, L1_wt=0)
-    pinv_wexog, _ = pinv_extended(model.wexog)
-    normalized_cov_params = np.dot(pinv_wexog, np.transpose(pinv_wexog))
-    summary = sm.regression.linear_model.OLSResults(model, reg_fit.params, normalized_cov_params)
+    if use_regularization_fit:
+        reg_fit = model.fit_regularized(alpha=lamb, L1_wt=0)
+        pinv_wexog, _ = pinv_extended(model.wexog)
+        normalized_cov_params = np.dot(pinv_wexog, np.transpose(pinv_wexog))
+        summary = sm.regression.linear_model.OLSResults(model, reg_fit.params, normalized_cov_params)
+    else:
+        summary = model.fit()
 
-    #return model.params
+    if np.any(np.isnan(summary.params)):
+        raise Exception('sm.OLS() failed to fit the regression model for this data')
+
     return summary
 
 

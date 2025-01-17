@@ -11,7 +11,7 @@ import numpy as np
 import pandas as pd
 import regression as reg
 import statsmodels.api as sm
-import ujson as json
+import simplejson as json
 import parsers
 from local_ancillary import local_stats_to_dict_fsl, ignore_nans
 import utils as ut
@@ -54,6 +54,7 @@ def local_1(args):
     y_labels = list(y.columns)
 
     lamb = input_list["lambda"]
+    ut.log(f'\nY inputspec received to local1_()\n: {str(input_list)}\n\n', args["state"])
 
     t = local_stats_to_dict_fsl(X, y, lamb)
     beta_vector, local_stats_list, meanY_vector, lenY_vector = t
@@ -77,7 +78,7 @@ def local_1(args):
     computation_output = {"output": output_dict, "cache": cache_dict}
     ut.log(f'\nY local_1() output: {str(computation_output)}', args["state"])
 
-    return json.dumps(computation_output)
+    return json.dumps(computation_output, ignore_nan=True)
 
 
 def local_2(args):
@@ -146,5 +147,5 @@ def local_2(args):
     ut.log(f'\nY local_1() output: {str(computation_output)}', args["state"])
 
 
-    return json.dumps(computation_output)
+    return json.dumps(computation_output, ignore_nan=True)
 

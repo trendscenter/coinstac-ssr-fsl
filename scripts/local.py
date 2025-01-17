@@ -5,7 +5,7 @@ This script includes the local computations for single-shot ridge
 regression with decentralized statistic calculation
 """
 import sys
-import ujson as json
+import simplejson as json
 from ancillary import list_recursive, get_unique_phase_key
 from local_funcs import local_1, local_2
 

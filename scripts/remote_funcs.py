@@ -7,9 +7,10 @@ regression with decentralized statistic calculation
 import numpy as np
 import regression as reg
 import scipy as sp
-import ujson as json
+import simplejson as json
 from itertools import repeat
 from remote_ancillary import get_stats_to_dict, persist_stats
+import utils as ut
 
 
 def remote_1(args):
@@ -43,7 +44,7 @@ def remote_1(args):
     userId = list(input_list)[0]
     X_labels = input_list[userId]["X_labels"]
     y_labels = input_list[userId]["y_labels"]
-
+    ut.log(f'remote_1 input: {str(input_list)}', args["state"])
     all_local_stats_dicts = [
         input_list[site]["local_stats_dict"] for site in input_list
     ]
@@ -80,7 +81,7 @@ def remote_1(args):
 
     computation_output = {"output": output_dict, "cache": cache_dict}
 
-    return json.dumps(computation_output)
+    return json.dumps(computation_output, ignore_nan=True)
 
 
 def remote_2(args):
@@ -189,4 +190,4 @@ def remote_2(args):
 
     computation_output = {"output": output_dict, "success": True}
 
-    return json.dumps(computation_output)
+    return json.dumps(computation_output, ignore_nan=True)

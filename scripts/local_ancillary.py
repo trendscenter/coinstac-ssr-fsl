@@ -133,7 +133,6 @@ def local_stats_to_dict_fsl(X, y, lamb):
         lenY_vector.append(len(y_))
 
         # Printing local stats as well
-        # model = sm.OLS(y_, X_).fit()
         model = reg.one_shot_regression(X_, y_, lamb)
 
         local_params.append(model.params)
