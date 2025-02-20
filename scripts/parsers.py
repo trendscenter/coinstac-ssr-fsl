@@ -1,5 +1,6 @@
 import os
 import pandas as pd
+import numpy as np
 import utils as ut
 
 def parse_for_y(args, y_files, y_labels):
@@ -51,6 +52,20 @@ def fsl_parser(args):
     X_df = pd.DataFrame.from_dict(X_info).T
 
     X = X_df.apply(pd.to_numeric, errors='ignore')
+
+    # Handle missing values in the covariates
+    # (if it is blank or NaN, remove that subject from processing"
+    rows_with_nan_cells = np.where(pd.isnull(X))[0].tolist()
+    rows_with_blank_cells = np.where(X.applymap(lambda x: x == ''))[0].tolist()
+
+    ignore_rows = list(set(rows_with_nan_cells).union(rows_with_blank_cells))
+    if len(ignore_rows)>0:
+        ut.log(f'Ignoring these subjects as they have empty or nan covariate values: '
+           f'{str(list(X.index[ignore_rows]))}', args["state"])
+
+    # Dropping subjects with empty or nan covariate values
+    X.drop(X.index[ignore_rows], inplace=True)
+
     X = pd.get_dummies(X, drop_first=True)
     X = X * 1
 
